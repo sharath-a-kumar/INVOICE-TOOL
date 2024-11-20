@@ -14,15 +14,19 @@ const customerSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
-    contact: {
-        phone: {
-            type: String,
-        },
-        email: {
-            type: String,
-        },
+    stateCode: {
+        type: String,
+        required: true,
     },
-});
+    email: {
+        type: String,
+        required: false,
+    },
+    phone: {
+        type: String,
+        required: false,
+    },
+}, { timestamps: true });
 
 const Customer = mongoose.model('Customer', customerSchema);
 

@@ -1,12 +1,19 @@
 const mongoose = require('mongoose');
-const Customer = require('./customerModel');
-const Product = require('./productModel');
 
 const invoiceSchema = new mongoose.Schema({
+    // Header Information
     invoiceNumber: {
         type: String,
         required: true,
         unique: true,
+    },
+    invoiceDate: {
+        type: Date,
+        required: true,
+    },
+    dueDate: {
+        type: Date,
+        required: true,
     },
     companyDetails: {
         name: {
@@ -21,38 +28,135 @@ const invoiceSchema = new mongoose.Schema({
             type: String,
             required: true,
         },
+        stateCode: {
+            type: String,
+            required: true,
+        },
+        email: {
+            type: String,
+            required: false,
+        },
+        phone: {
+            type: String,
+            required: false,
+        },
     },
+    eSugamDetails: {
+        type: String, // Add if applicable
+        required: false,
+    },
+
+    // Customer Information
     customerDetails: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Customer', // References the Customer model
-        required: true,
+        customerId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Customer',
+            required: true,
+        },
+        name: {
+            type: String,
+            required: true,
+        },
+        address: {
+            type: String,
+            required: true,
+        },
+        gstin: {
+            type: String,
+            required: true,
+        },
+        stateCode: {
+            type: String,
+            required: true,
+        },
     },
+
+    // Order Information
+    orderDetails: {
+        referencePONumber: {
+            type: String,
+            required: false,
+        },
+        referencePODate: {
+            type: Date,
+            required: false,
+        },
+        deliveryChallanNumber: {
+            type: String,
+            required: false,
+        },
+        deliveryChallanDate: {
+            type: Date,
+            required: false,
+        },
+        modeOfDispatch: {
+            type: String,
+            enum: ['Road', 'Rail', 'Air'], // Limited options
+            required: false,
+        },
+        vehicleNumber: {
+            type: String,
+            required: false,
+        },
+        ewayBillNumber: {
+            type: String,
+            required: false,
+        },
+    },
+
+    // Item Details
     items: [
         {
-            product: {
+            productId: {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: 'Product', // References the Product model
+                ref: 'Product',
+                required: true,
+            },
+            description: {
+                type: String,
+                required: true,
+            },
+            sacCode: {
+                type: String,
                 required: true,
             },
             quantity: {
                 type: Number,
                 required: true,
             },
-            amount: {
+            rate: {
                 type: Number,
                 required: true,
             },
-            gstAmount: {
+            taxableValue: {
                 type: Number,
                 required: true,
+            },
+            gstRate: {
+                type: Number,
+                required: true,
+            },
+            cgstAmount: {
+                type: Number,
+                required: false,
+            },
+            sgstAmount: {
+                type: Number,
+                required: false,
+            },
+            igstAmount: {
+                type: Number,
+                required: false,
             },
         },
     ],
-    totalAmount: {
+
+    // Summary
+    subTotal: {
         type: Number,
         required: true,
     },
-    totalGST: {
+    roundOff: {
         type: Number,
         required: true,
     },
@@ -60,15 +164,39 @@ const invoiceSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    date: {
-        type: Date,
-        default: Date.now,
-    },
-    createdBy: {
+    amountInWords: {
         type: String,
         required: true,
     },
-});
+
+    // Additional Information
+    termsAndConditions: {
+        type: String,
+        required: false,
+    },
+    bankDetails: {
+        name: {
+            type: String,
+            required: false,
+        },
+        branch: {
+            type: String,
+            required: false,
+        },
+        accountNumber: {
+            type: String,
+            required: false,
+        },
+        micr: {
+            type: String,
+            required: false,
+        },
+        ifsc: {
+            type: String,
+            required: false,
+        },
+    },
+}, { timestamps: true });
 
 const Invoice = mongoose.model('Invoice', invoiceSchema);
 

@@ -1,20 +1,12 @@
 const express = require('express');
-const router = express.Router();
 const customerController = require('../controllers/customerController');
+const { validateRequest } = require('../validators/requestValidator');
+const { customerSchema } = require('../validators/schemas');
+const router = express.Router();
 
-// Create a new customer
-router.post('/customers', customerController.createCustomer);
-
-// Get all customers
 router.get('/customers', customerController.getAllCustomers);
-
-// Get customer by ID
-router.get('/customers/:id', customerController.getCustomerById);
-
-// Update customer details
+router.post('/customers', customerController.createCustomer);
 router.put('/customers/:id', customerController.updateCustomer);
-
-// Delete a customer
 router.delete('/customers/:id', customerController.deleteCustomer);
-
+router.post('/', validateRequest(customerSchema), customerController.createCustomer);
 module.exports = router;

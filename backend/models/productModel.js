@@ -5,6 +5,10 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    sacCode: {
+        type: String,
+        required: true,
+    },
     rate: {
         type: Number,
         required: true,
@@ -13,7 +17,7 @@ const productSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-});
+}, { timestamps: true });
 
 const Product = mongoose.model('Product', productSchema);
 
